@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}월간 캘린더 – Dev Diary{% endblock %}
+
+{% block head_extra %}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mb-4">
+    <h2 class="text-2xl font-semibold">월간 캘린더</h2>
+</div>
+<div id="calendar-month" class="max-w-4xl mx-auto"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const calendar = new FullCalendar.Calendar(
+            document.getElementById('calendar-month'), {
+            initialView: 'dayGridMonth',
+            headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+            events: '/api/events',
+            dateClick: info => {
+                // 클릭한 날짜 주간 뷰로 이동
+                window.location.href = `/week/${info.dateStr}`;
+            }
+        }
+        );
+        calendar.render();
+    });
+</script>
+{% endblock %}

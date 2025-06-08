@@ -1,13 +1,21 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from datetime import datetime
+
 from .models import Entry
 from . import db
-from datetime import date
+
 
 bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def calendar():
-    return render_template('calendar.html')
+    # 월간 달력
+    return render_template('calendar_month.html')
+
+@bp.route('/week/<date_str>')
+def week_view(date_str):
+    # 주간 달력 – URL에서 받은 날짜를 초기 주간 날짜로 사용
+    return render_template('calendar_week.html', initial_date=date_str)
 
 @bp.route('/api/events')
 def api_events():

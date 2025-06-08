@@ -8,3 +8,4 @@ class Entry(db.Model):
     title   = db.Column(db.String(128), nullable=False)
     kind    = db.Column(db.Enum('auto', 'manual'), default='manual')
     source  = db.Column(db.String(64))
+    content  = db.Column(db.Text)
