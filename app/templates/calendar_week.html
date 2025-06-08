@@ -7,29 +7,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto flex justify-between items-center mb-4">
+<div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
   <a href="/" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">◀ 월간 보기</a>
   <h2 class="text-2xl font-semibold">{{ initial_date }} 주간 일정</h2>
 </div>
+
 <div id="calendar-week" class="max-w-4xl mx-auto"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const calendar = new FullCalendar.Calendar(
-      document.getElementById('calendar-week'), {
+    const calEl = document.getElementById('calendar-week');
+    const calendar = new FullCalendar.Calendar(calEl, {
       initialView: 'dayGridWeek',
       initialDate: '{{ initial_date }}',
-      headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
-      events: '/api_events'.replace('_', '/'), // '/api/events'
-      // 또는 그냥 events: '/api/events',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+      },
       events: '/api/events',
       dateClick: info => {
-        // 클릭 시 상세 일지로
+        // 일별 상세 페이지로 이동
         window.location.href = `/entry/${info.dateStr}`;
       },
       height: 'auto'
-    }
-    );
+    });
     calendar.render();
   });
 </script>

@@ -7,24 +7,53 @@
 {% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto mb-4">
-    <h2 class="text-2xl font-semibold">월간 캘린더</h2>
+<div class="max-w-4xl mx-auto p-4 space-y-4">
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-semibold">월간 캘린더</h2>
+        <!-- 주간 버튼 컨테이너 -->
+        <div id="week-buttons" class="space-x-2"></div>
+    </div>
+    <div id="calendar-month"></div>
 </div>
-<div id="calendar-month" class="max-w-4xl mx-auto"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const calendar = new FullCalendar.Calendar(
-            document.getElementById('calendar-month'), {
+        const calEl = document.getElementById('calendar-month');
+        const weekBtns = document.getElementById('week-buttons');
+
+        const calendar = new FullCalendar.Calendar(calEl, {
             initialView: 'dayGridMonth',
-            headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
             events: '/api/events',
             dateClick: info => {
-                // 클릭한 날짜 주간 뷰로 이동
-                window.location.href = `/week/${info.dateStr}`;
+                // 일별 상세 페이지로 이동
+                window.location.href = `/entry/${info.dateStr}`;
+            },
+            datesSet: ({ view }) => {
+                // 월간 뷰가 바뀔 때마다 주별 버튼 생성
+                weekBtns.innerHTML = '';
+                let start = new Date(view.currentStart);
+                const end = new Date(view.currentEnd);
+
+                // FullCalendar 월간 뷰는 6주/행(일요일 기준)
+                // 매 7일 단위로 버튼 만들기
+                while (start < end) {
+                    const iso = start.toISOString().slice(0, 10);
+                    const btn = document.createElement('button');
+                    btn.textContent = iso.slice(8) + '주';  // “DD주” 혹은 포맷 변경 가능
+                    btn.className = 'px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm';
+                    btn.onclick = () => window.location.href = `/week/${iso}`;
+                    weekBtns.appendChild(btn);
+                    // 다음 주로
+                    start.setDate(start.getDate() + 7);
+                }
             }
-        }
-        );
+        });
+
         calendar.render();
     });
 </script>
