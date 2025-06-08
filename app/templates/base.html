@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Dev Diary{% endblock %}</title>
+    <!-- Tailwind CDN (개발용) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% block head_extra %}{% endblock %}
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <nav class="p-4 bg-white shadow">
+        <a href="/" class="font-bold text-xl">Dev Diary</a>
+    </nav>
+    <main class="p-6">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>
